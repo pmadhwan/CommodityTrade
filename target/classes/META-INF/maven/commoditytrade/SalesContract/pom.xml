@@ -1,0 +1,163 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>commoditytrade</groupId>
+	<artifactId>SalesContract</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.8.RELEASE</version>
+	</parent>
+
+	<name>SalesContract</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.web3j</groupId>
+			<artifactId>quorum</artifactId>
+			<version>4.0.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.web3j</groupId>
+			<artifactId>core</artifactId>
+			<version>4.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>2.9.2</version>
+</dependency>
+
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger-ui</artifactId>
+    <version>2.9.2</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+  
+</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+                   <groupId>org.web3j</groupId>
+                   <artifactId>web3j-maven-plugin</artifactId>
+                   <version>4.2.0</version>
+                   <executions>
+                        <execution>
+                             <id>generate-sources-web3j</id>
+                             <phase>generate-sources</phase>
+                             <goals>
+                                  <goal>generate-sources</goal>
+                             </goals>
+                             <configuration>
+                                  <packageName>com.commodity.blockchain.contractwrapper</packageName>
+                                  <sourceDestination>${basedir}/src/main/java</sourceDestination>
+                                  <outputFormat>java</outputFormat>
+                                  <soliditySourceFiles>
+                                       <directory>src/main/resources/contracts/</directory>
+                                      <includes>
+                                           <include>**/*.sol</include>
+                                      </includes>
+                                  </soliditySourceFiles>
+                                  <!-- <outputDirectory> <java>src.main.com.rights.royalties.quorum.wrapperclasses</java> 
+                                      </outputDirectory> -->
+                             </configuration>
+                        </execution>
+                   </executions>
+              </plugin>
+
+              <plugin>
+                   <groupId>org.codehaus.mojo</groupId>
+                   <artifactId>build-helper-maven-plugin</artifactId>
+                   <executions>
+                        <execution>
+                             <id>add-source</id>
+                             <phase>generate-sources</phase>
+                             <goals>
+                                  <goal>add-source</goal>
+                             </goals>
+                             <configuration>
+                                  <sources>
+                                       <source>${basedir}/target/generated-sources/ethereum/wrapperclasses</source>
+                                  </sources>
+                             </configuration>
+                        </execution>
+                   </executions>
+              </plugin> 
+			
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.web3j</groupId>
+										<artifactId>
+											web3j-maven-plugin
+										</artifactId>
+										<versionRange>
+											[4.2.0,)
+										</versionRange>
+										<goals>
+											<goal>
+												generate-sources
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
