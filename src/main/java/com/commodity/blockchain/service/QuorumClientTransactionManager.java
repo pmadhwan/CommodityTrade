@@ -1,15 +1,11 @@
 
 package com.commodity.blockchain.service;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.web3j.crypto.CipherException;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.quorum.Quorum;
 import org.web3j.quorum.tx.ClientTransactionManager;
 
@@ -65,17 +61,21 @@ public class QuorumClientTransactionManager {
 	public ClientTransactionManager getSellerClientTransactionManager() {
 		ClientTransactionManager transactionManager = new ClientTransactionManager(quorum, 
 				sellernodeAddress, sellerpubkey,
-				Arrays.asList(buyerpubkey), 5, 25000);
-		System.out.println("tranx manager:"+transactionManager.getFromAddress());
+				Arrays.asList(buyerpubkey,buyerBankpubkey), 15, 25000);
+		System.out.println("tranx manager:"+transactionManager.getPrivateFor());
 		return transactionManager;
 
 	}
 	
 	public ClientTransactionManager getBuyerClientTransactionManager() {
-		ClientTransactionManager transactionManager = new ClientTransactionManager(quorum,
+		ClientTransactionManager transactionManager = new ClientTransactionManager(
+				quorum,
 				buyernodeAddress, buyerpubkey,
-				Arrays.asList(buyerBankpubkey),
-				5, 25000);
+				
+				Arrays.asList(buyerBankpubkey,sellerpubkey),
+				//null,
+				15, 25000);
+		System.out.println("buyer tx manager :"+transactionManager.getPrivateFor());
 		return transactionManager;
 
 	}
@@ -83,7 +83,7 @@ public class QuorumClientTransactionManager {
 	public ClientTransactionManager getSellerBankClientTransactionManager() {
 		ClientTransactionManager transactionManager = new ClientTransactionManager(quorum,
 				beneficiaryBanknodeAddress, sellerBankpubkey,
-				Arrays.asList(buyerBankpubkey,buyerpubkey,sellerpubkey), 5, 25000);
+				Arrays.asList(buyerBankpubkey,buyerpubkey), 5, 25000);
 		return transactionManager;
 
 	}
@@ -91,7 +91,7 @@ public class QuorumClientTransactionManager {
 	public ClientTransactionManager getBuyerBankClientTransactionManager() {
 		ClientTransactionManager transactionManager = new ClientTransactionManager(quorum,
 				issuanceBanknodeAddress, buyerBankpubkey,
-				Arrays.asList(sellerBankpubkey,buyerpubkey,sellerpubkey), 5, 25000);
+				Arrays.asList(buyerpubkey,sellerpubkey), 5, 25000);
 		return transactionManager;
 
 	}

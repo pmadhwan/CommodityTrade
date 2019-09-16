@@ -64,9 +64,7 @@ public class IssuanceBankService {
 		return tr.getTransactionHash();
 	}
 
-	public String generateLOC(String contractAddress) {
-		return "Success";
-	}
+	
 
 	public SalesContract getDetails(String contractAddress) throws IOException, CipherException {
 
@@ -74,12 +72,9 @@ public class IssuanceBankService {
 		System.out.println("deal:" + deal);
 		SalesContract salescontract = new SalesContract();
 
-		ClientTransactionManager transactionManager = new ClientTransactionManager(quorum, bankNodeAddress,
-				"KANINW1JGnme35RXIUhgxGKmy2uImalVDlnzVqtR3UY="
-				// "GyAVCka2T8ZDow/KzH2j1+pxJFSay4kIshCD2leYIEA="
-				, Arrays.asList(), 5, 25000);
+		
 
-		CommodityDeal smartContract = CommodityDeal.load(contractAddress, quorum, transactionManager,
+		CommodityDeal smartContract = CommodityDeal.load(contractAddress, quorum, transactionManager.getBuyerBankClientTransactionManager(),
 				contractGasProvider);
 
 		try {

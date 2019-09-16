@@ -31,7 +31,7 @@ public class BuyerController {
 	}
 	
 	
-	@GetMapping("/requestLOC")
+	@GetMapping("/request/loc")
 	public String getLOC(@RequestParam("contractAddress") String contractAddress)
 			throws Exception {
 		String contract = buyerService.requestLOC(contractAddress);

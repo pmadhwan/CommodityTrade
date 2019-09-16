@@ -10,7 +10,7 @@ public class QuorumContractGasProvider extends DefaultGasProvider {
 
 	@Override
 	public BigInteger getGasPrice(String contractFunc) {
-		return BigInteger.valueOf(129000000);
+		return BigInteger.valueOf(12900000);
 	}
 
 	@Override
@@ -18,9 +18,9 @@ public class QuorumContractGasProvider extends DefaultGasProvider {
 		BigInteger gaslimit = BigInteger.valueOf(48000000);
 		return gaslimit;
 	}
-	/*
-	 * public BigInteger getGasPrice() { return DefaultGasProvider.GAS_LIMIT; }
-	 * 
-	 * public BigInteger getGasLimit() { return DefaultGasProvider.GAS_PRICE; }
-	 */
+	
+	  public BigInteger getGasPrice() { return DefaultGasProvider.GAS_LIMIT; }
+	  
+	  public BigInteger getGasLimit() { return DefaultGasProvider.GAS_PRICE; }
+	 
 } 

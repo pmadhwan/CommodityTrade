@@ -2,18 +2,14 @@ package com.commodity.service;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.CipherException;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.quorum.Quorum;
-import org.web3j.quorum.tx.ClientTransactionManager;
 import org.web3j.tuples.generated.Tuple9;
 
-import com.commodity.blockchain.QuorumAdapter;
 import com.commodity.blockchain.contractwrapper.CommodityDeal;
 import com.commodity.blockchain.service.QuorumClientTransactionManager;
 import com.commodity.blockchain.service.QuorumContractGasProvider;
@@ -24,7 +20,6 @@ import com.commodity.entity.Commodity;
 import com.commodity.entity.Deal;
 import com.commodity.repository.CommodityRepository;
 import com.commodity.repository.DealRepository;
-import com.commodity.repository.SalesContractRepository;
 import com.commodity.vo.Bank;
 import com.commodity.vo.SalesContract;
 
@@ -34,8 +29,8 @@ public class BuyerService {
 	@Autowired
 	CommodityRepository commRepository;
 	
-	@Value(value = "${buyer.account}")
-	private String buyerNodeAddress;
+	//@Value(value = "${buyer.account}")
+	//private String buyerNodeAddress;
 
 	@Autowired
 	private QuorumContractGasProvider contractGasProvider;
@@ -46,11 +41,7 @@ public class BuyerService {
 	@Autowired
 	Quorum quorum;
 	
-	@Autowired
-	private QuorumAdapter quorumAdapter;
 	
-	@Autowired
-	private SalesContractRepository scRepository;
 	
 	@Autowired
 	private DealRepository dealRepository;
@@ -68,7 +59,9 @@ public class BuyerService {
 					  contractGasProvider);
 			  
 			 TransactionReceipt tr= smartContract.requestLOC().send();
+			 
 			 System.out.println("tranasaction hash:"+tr.getTransactionHash());
+			 
 		 return tr.getTransactionHash();
 	 }
 	 
@@ -80,7 +73,8 @@ public class BuyerService {
 				SalesContract salescontract =new SalesContract();
 				
 
-				  CommodityDeal smartContract = CommodityDeal.load(contractAddress, quorum,
+				  CommodityDeal smartContract = CommodityDeal.
+						  load(contractAddress, quorum,
 						  transactionManager.getBuyerClientTransactionManager(),
 						  contractGasProvider);
 				 
@@ -116,15 +110,15 @@ public class BuyerService {
 				return salescontract;
 			}
 
-	public String setBank(Bank b,String contractAddress) throws Exception {
-		CommodityDeal smartContract = CommodityDeal.load(contractAddress, quorum,
-				transactionManager.getBuyerClientTransactionManager(),
-				contractGasProvider);
-		System.out.println("namk node :"+b.getBanknodeAddress());
-		//transactionManager.unloackAccount();
-		TransactionReceipt tr = smartContract.setbank(b.getBanknodeAddress(),
-				BigInteger.ONE).send();
-		return tr.getTransactionHash();
-	}
+	 public String setBank(Bank b,String contractAddress) throws Exception {
+
+			CommodityDeal smartContract = CommodityDeal.load(contractAddress, quorum,
+					transactionManager.getBuyerClientTransactionManager(),
+					contractGasProvider);
+
+			TransactionReceipt tr = smartContract.setbank(b.getBanknodeAddress(),
+					BigInteger.ONE).send();
+			return tr.getTransactionHash();
+		}
 	 
 }

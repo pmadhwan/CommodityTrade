@@ -49,8 +49,7 @@ public class SellerService {
 	@Autowired
 	private QuorumAdapter quorumAdapter;
 
-	@Autowired
-	private SalesContractRepository scRepository;
+	
 
 	@Autowired
 	private DealRepository dealRepository;
@@ -64,38 +63,50 @@ public class SellerService {
 		try {
 
 			
+			
 			/*
 			 * ClientTransactionManager transactionManager1 = new
 			 * ClientTransactionManager(quorum,
 			 * "0x1589525e9c86049f287999523a11e4dc3a77f15a",
-			 * "KANINW1JGnme35RXIUhgxGKmy2uImalVDlnzVqtR3UY=" , //
-			 * "GyAVCka2T8ZDow/KzH2j1+pxJFSay4kIshCD2leYIEA=" , Arrays.asList(), 5, 25000);
+			 * "KANINW1JGnme35RXIUhgxGKmy2uImalVDlnzVqtR3UY=",
+			 * //"GyAVCka2T8ZDow/KzH2j1+pxJFSay4kIshCD2leYIEA=", Arrays.asList(), 5, 25000);
 			 */
 			
-			ClientTransactionManager transactionManager = new ClientTransactionManager(quorum, 
-					"0x53a68d89e4808004d0b99ab7540eebae1307c391", "GyAVCka2T8ZDow/KzH2j1+pxJFSay4kIshCD2leYIEA=",
-					Arrays.asList(), 5, 25000);
-			System.out.println("tranx manager:"+transactionManager.getFromAddress());
-			 
 			/*
-			 * CommodityDeal smartContract = CommodityDeal .deploy(quorum,
-			 * transactionManager, contractGasProvider,
-			 * DataTypeConverter.stringTo32Byte(salesContract.getBuyerName()),
-			 * DataTypeConverter.stringTo32Byte(salesContract.getSellerName()),
-			 * DataTypeConverter.stringTo32Byte(salesContract.getCommodity().
-			 * getCommodityName()),
-			 * BigInteger.valueOf(salesContract.getCommodity().getWeight()),
-			 * BigInteger.valueOf(salesContract.getCommodity().getSelectedBidPrice()),
-			 * BigInteger.valueOf(salesContract.getGrade().ordinal()),
-			 * BigInteger.valueOf(salesContract.getIntendedDelievryDate()),
-			 * salesContract.getComments(), buyerNodeAddress).send();
+			 * ClientTransactionManager transactionManager1 = new
+			 * ClientTransactionManager(quorum,
+			 * "0x53a68d89e4808004d0b99ab7540eebae1307c391",
+			 * "GyAVCka2T8ZDow/KzH2j1+pxJFSay4kIshCD2leYIEA=", Arrays.asList(), 15, 25000);
 			 */
+			//System.out.println("tranx manager:" + transactionManager1.getFromAddress());
+			 
+			
+			
+			
+			CommodityDeal smartContract = CommodityDeal.deploy(quorum, transactionManager.getSellerClientTransactionManager()
+					, contractGasProvider,
+					DataTypeConverter.stringTo32Byte(salesContract.getBuyerName()),
+					DataTypeConverter.stringTo32Byte(salesContract.getSellerName()),
+					DataTypeConverter.stringTo32Byte(salesContract.getCommodity().getCommodityName()),
+					BigInteger.valueOf(salesContract.getCommodity().getWeight()),
+					BigInteger.valueOf(salesContract.getCommodity().getSelectedBidPrice()),
+					BigInteger.valueOf(salesContract.getGrade().ordinal()),
+					BigInteger.valueOf(salesContract.getIntendedDelievryDate()), salesContract.getComments(),
+					buyerNodeAddress).send();
+			 
+			 
+			 
 
-			CommodityDeal smartContract = CommodityDeal.deploy(quorum, transactionManager, contractGasProvider,
-					DataTypeConverter.stringTo32Byte("Tata"), DataTypeConverter.stringTo32Byte("Birla"),
-					DataTypeConverter.stringTo32Byte("Com"), BigInteger.valueOf(123l), BigInteger.valueOf(1234l),
-					BigInteger.ZERO, BigInteger.valueOf(12312312l), "asdasd", "0x53a68d89e4808004d0b99ab7540eebae1307c391").
-					send();
+			/*
+			 * CommodityDeal smartContract = CommodityDeal.deploy(quorum,
+			 * transactionManager1, contractGasProvider,
+			 * DataTypeConverter.stringTo32Byte("Tata"),
+			 * DataTypeConverter.stringTo32Byte("Birla"),
+			 * DataTypeConverter.stringTo32Byte("Com"), BigInteger.valueOf(123l),
+			 * BigInteger.valueOf(1234l), BigInteger.ZERO, BigInteger.valueOf(12312),
+			 * "asdasd", "0x53a68d89e4808004d0b99ab7540eebae1307c391") .send();
+			 */
+			 
 
 			// System.out.println(smartContract);
 			Optional<TransactionReceipt> txHash = smartContract.getTransactionReceipt();
