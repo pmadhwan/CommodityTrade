@@ -20,8 +20,24 @@ public class SalesContract {
 	private String comments;
 	private ContractState status;
 	
-
+	public SalesContract() {
+		
+	}
 	
+	
+
+	public SalesContract(String contractAddress, String buyerName, String sellerName, Commodity commodity, Grade grade,
+			long intendedDelievryDate, String comments, ContractState status) {
+		super();
+		this.contractAddress = contractAddress;
+		this.buyerName = buyerName;
+		this.sellerName = sellerName;
+		this.commodity = commodity;
+		this.grade = grade;
+		this.intendedDelievryDate = intendedDelievryDate;
+		this.comments = comments;
+		this.status = status;
+	}
 
 	public Commodity getCommodity() {
 		return commodity;

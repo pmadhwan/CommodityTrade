@@ -6,6 +6,25 @@ public class Bank {
 
 	private String BanknodeAddress;
 	private BankType type;
+	private String txhash;
+	
+	public Bank() {
+		
+	}
+	
+	
+	public Bank(String banknodeAddress, BankType type, String txhash) {
+		super();
+		BanknodeAddress = banknodeAddress;
+		this.type = type;
+		this.txhash = txhash;
+	}
+	public String getTxhash() {
+		return txhash;
+	}
+	public void setTxhash(String txhash) {
+		this.txhash = txhash;
+	}
 	public String getBanknodeAddress() {
 		return BanknodeAddress;
 	}

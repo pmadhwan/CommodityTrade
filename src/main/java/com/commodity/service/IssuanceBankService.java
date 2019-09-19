@@ -2,7 +2,8 @@ package com.commodity.service;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,21 +11,20 @@ import org.springframework.stereotype.Service;
 import org.web3j.crypto.CipherException;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.quorum.Quorum;
-import org.web3j.quorum.tx.ClientTransactionManager;
 import org.web3j.tuples.generated.Tuple9;
 
-import com.commodity.blockchain.QuorumAdapter;
 import com.commodity.blockchain.contractwrapper.CommodityDeal;
 import com.commodity.blockchain.service.QuorumClientTransactionManager;
 import com.commodity.blockchain.service.QuorumContractGasProvider;
 import com.commodity.commons.ContractState;
 import com.commodity.commons.DataTypeConverter;
-import com.commodity.commons.Grade;
 import com.commodity.entity.Commodity;
 import com.commodity.entity.Deal;
+import com.commodity.repository.CommodityRepository;
 import com.commodity.repository.DealRepository;
-import com.commodity.repository.SalesContractRepository;
 import com.commodity.vo.SalesContract;
+
+import io.reactivex.internal.observers.ForEachWhileObserver;
 
 @Service
 public class IssuanceBankService {
@@ -43,25 +43,56 @@ public class IssuanceBankService {
 	
 	@Autowired
 	private DealRepository dealRepository;
+	
+	@Autowired
+	private CommodityRepository commRepository;
+	
+	@Autowired
+	private BuyerService buyerService;
+	
+	public List<Commodity> getAll(String bankAddress) {
+		List<Commodity> clist = new ArrayList<>();
+		
+		List<Deal> dealList=dealRepository.findByBuyerBank(bankAddress);
+		if(!dealList.isEmpty()&&dealList!=null) {
+			for (Deal deal : dealList) {
+				Commodity comm=new Commodity();
+				comm=commRepository.findById(deal.getCommodityId()).orElse(null);
+				clist.add(comm);
+			}
+		}
+		
+		System.out.println("commodity list for buyer bank:"+clist);
+
+		return clist;
+	}
 
 	public String acceptContract(String contractAddress) throws Exception {
 		
 
 		CommodityDeal smartContract = CommodityDeal.load(contractAddress,
-				quorum, transactionManager.getBuyerBankClientTransactionManager(),
+				quorum, transactionManager.getSellerClientTransactionManager(),
 				contractGasProvider);
 		TransactionReceipt tr= smartContract.setStatus(BigInteger.ZERO).send();
-		return tr.getTransactionHash();
+		Boolean state= buyerService.updateStatus(ContractState.ACCEPTED_BANK_BUYER, contractAddress);
+		if(state) {
+			return tr.getTransactionHash();
+		}
+		return null;
 	}
 
 	public String rejectContract(String contractAddress) throws Exception {
 
 
 		CommodityDeal smartContract = CommodityDeal.load(contractAddress, 
-				quorum, transactionManager.getBuyerBankClientTransactionManager(),
+				quorum, transactionManager.getSellerClientTransactionManager(),
 				contractGasProvider);
 		TransactionReceipt tr= smartContract.setStatus(BigInteger.ONE).send();
-		return tr.getTransactionHash();
+		Boolean state= buyerService.updateStatus(ContractState.REJECTED_BANK_BUYER, contractAddress);
+		if(state) {
+			return tr.getTransactionHash();
+		}
+		return null;
 	}
 
 	
@@ -89,7 +120,8 @@ public class IssuanceBankService {
 			Commodity commodity = new Commodity();
 			commodity.setCommodityName(DataTypeConverter.Bytes32toString(details.getValue3()).trim());
 			commodity.setWeight(details.getValue4().longValue());
-			commodity.setSelectedBidPrice(details.getValue5().longValue());
+			commodity.setPrice(details.getValue5().longValue());
+			commodity.setStatus(salescontract.getStatus());
 			salescontract.setCommodity(commodity);
 			//salescontract.setGrade(Grade.values()[details.getValue6().intValue()]);
 			salescontract.setIntendedDelievryDate(details.getValue7().longValue());

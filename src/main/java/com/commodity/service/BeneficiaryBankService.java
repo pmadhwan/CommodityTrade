@@ -2,7 +2,9 @@ package com.commodity.service;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +24,7 @@ import com.commodity.commons.DataTypeConverter;
 import com.commodity.commons.Grade;
 import com.commodity.entity.Commodity;
 import com.commodity.entity.Deal;
+import com.commodity.repository.CommodityRepository;
 import com.commodity.repository.DealRepository;
 import com.commodity.repository.SalesContractRepository;
 import com.commodity.vo.SalesContract;
@@ -49,21 +52,54 @@ public class BeneficiaryBankService {
 
 	@Autowired
 	private DealRepository dealRepository;
+	
+	@Autowired
+	private BuyerService buyerService;
+	
+	
+	@Autowired
+	private CommodityRepository commRepository;
+	
+	public List<Commodity> getAll(String bankAddress) {
+		List<Commodity> clist = new ArrayList<>();
+		
+		List<Deal> dealList=dealRepository.findBySellerBank(bankAddress);
+		if(!dealList.isEmpty()&&dealList!=null) {
+			for (Deal deal : dealList) {
+				Commodity comm=new Commodity();
+				comm=commRepository.findById(deal.getCommodityId()).orElse(null);
+				clist.add(comm);
+			}
+		}
+		
+		System.out.println("commodity list for seller bank:"+clist);
+
+		return clist;
+	}
 
 	public String acceptContract(String contractAddress) throws Exception {
 
 		CommodityDeal smartContract = CommodityDeal.load(contractAddress, quorum,
-				transactionManager.getSellerBankClientTransactionManager(), contractGasProvider);
+				transactionManager.getSellerClientTransactionManager(), contractGasProvider);
 		TransactionReceipt tr = smartContract.setStatus(BigInteger.ZERO).send();
-		return tr.getTransactionHash();
+		Boolean state= buyerService.updateStatus(ContractState.ACCEPTED_BANK_SELLER, contractAddress);
+		if(state) {
+			return tr.getTransactionHash();
+		}
+		return null;
+		
 	}
 
 	public String rejectContract(String contractAddress) throws Exception {
 
 		CommodityDeal smartContract = CommodityDeal.load(contractAddress, quorum,
-				transactionManager.getSellerBankClientTransactionManager(), contractGasProvider);
+				transactionManager.getSellerClientTransactionManager(), contractGasProvider);
 		TransactionReceipt tr = smartContract.setStatus(BigInteger.ONE).send();
-		return tr.getTransactionHash();
+		Boolean state= buyerService.updateStatus(ContractState.REJECTED_BANK_SELLER, contractAddress);
+		if(state) {
+			return tr.getTransactionHash();
+		}
+		return null;
 	}
 
 	public String generateLOC(String contractAddress) {
@@ -93,8 +129,9 @@ public class BeneficiaryBankService {
 			Commodity commodity = new Commodity();
 			commodity.setCommodityName(DataTypeConverter.Bytes32toString(details.getValue3()).trim());
 			commodity.setWeight(details.getValue4().longValue());
-			commodity.setSelectedBidPrice(details.getValue5().longValue());
+			commodity.setPrice(details.getValue5().longValue());
 			salescontract.setCommodity(commodity);
+			commodity.setStatus(salescontract.getStatus());
 			//salescontract.setGrade(Grade.values()[details.getValue6().intValue()]);
 			salescontract.setIntendedDelievryDate(details.getValue7().longValue());
 			salescontract.setSellerName(DataTypeConverter.Bytes32toString(details.getValue2()).trim());

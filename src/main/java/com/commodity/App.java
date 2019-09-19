@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
  */
 
 @SpringBootApplication
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class App 
 {
     public static void main( String[] args )
