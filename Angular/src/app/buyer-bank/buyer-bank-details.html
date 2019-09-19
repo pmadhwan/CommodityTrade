@@ -1,0 +1,86 @@
+<h1 mat-dialog-title>Details for Tender: {{data.contractAddress}}</h1>
+<table style="width: 100%;">
+    <tr>
+        <td>
+            <mat-label><b>Commodity:</b></mat-label>
+        </td>
+        <td>
+            <mat-form-field>
+                <input matInput [readonly]="true" [(ngModel)]="data.commodity.commodityName" value="data.commodity.commodityName">
+            </mat-form-field>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <mat-label><b>Price:</b></mat-label>
+        </td>
+        <td>
+            <mat-form-field>
+                <input matInput [readonly]="true" [(ngModel)]="data.commodity.price" value="data.commodity.price">
+            </mat-form-field>
+        </td>
+
+    <tr>
+        <td>
+            <mat-label><b>Quantity:</b></mat-label>
+        </td>
+        <td>
+            <mat-form-field>
+                <input matInput [readonly]="true" [(ngModel)]="data.commodity.weight" value="data.commodity.weight">
+            </mat-form-field>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <mat-label><b>Buyer:</b></mat-label>
+        </td>
+        <td>
+            <mat-form-field>
+                <input matInput [readonly]="true" [(ngModel)]="data.buyerName" value="data.buyerName">
+            </mat-form-field>
+        </td>
+    </tr>
+    <tr>
+            <td>
+                <mat-label><b>Seller:</b></mat-label>
+            </td>
+            <td>
+                <mat-form-field>
+                    <input matInput [readonly]="true" [(ngModel)]="data.sellerName" value="data.sellerName">
+                </mat-form-field>
+            </td>
+        </tr>
+
+   
+    <tr>
+            <td>
+                <mat-label><b>Delivery Date:</b></mat-label>
+            </td>
+            <td>
+                <mat-form-field>
+                    <input matInput  [(ngModel)]="data.intendedDeliveryDate" value="data.intendedDeliveryDate">
+                </mat-form-field>
+            </td>
+        </tr>
+
+       
+    <tr>
+    
+
+            <td> <button mat-raised-button style="background: white; color: green;" (click)="accept();">Accept</button>
+                <div *ngIf="spinner" >
+                        <mat-spinner
+                        ></mat-spinner>
+                     
+               </div></td>
+            <td> <button mat-raised-button style="background: white; color: red;" (click)="reject();">Reject</button>
+                <div *ngIf="spinner" >
+                        <mat-spinner
+                        ></mat-spinner>
+                     
+               </div></td>
+        
+    </tr>
+</table>

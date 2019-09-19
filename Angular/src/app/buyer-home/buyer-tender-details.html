@@ -1,0 +1,119 @@
+<h1 mat-dialog-title>Details for Tender: {{data.contractAddress}}</h1>
+<table style="width: 100%;">
+        <tr>
+                <td>
+                    <mat-label><b>Commodity:</b></mat-label>
+                </td>
+                <td>
+                    <mat-form-field>
+                        <input matInput [readonly]="true" [(ngModel)]="data.commodityName" value="data.commoditName">
+                    </mat-form-field>
+                </td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <mat-label><b>Price:</b></mat-label>
+                </td>
+                <td>
+                    <mat-form-field>
+                        <input matInput [readonly]="true" [(ngModel)]="data.price" value="data.price">
+                    </mat-form-field>
+                </td>
+        
+            <tr>
+                <td>
+                    <mat-label><b>Quantity:</b></mat-label>
+                </td>
+                <td>
+                    <mat-form-field>
+                        <input matInput [readonly]="true" [(ngModel)]="data.weight" value="data.weight">
+                    </mat-form-field>
+                </td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <mat-label><b>Buyer:</b></mat-label>
+                </td>
+                <td>
+                    <mat-form-field>
+                        <input matInput [readonly]="true" [(ngModel)]="data.buyerId" value="data.buyerId">
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                    <td>
+                        <mat-label><b>Seller:</b></mat-label>
+                    </td>
+                    <td>
+                        <mat-form-field>
+                            <input matInput [readonly]="true" [(ngModel)]="data.sellerName" value="data.sellerName">
+                        </mat-form-field>
+                    </td>
+                </tr>
+        
+            <tr>
+                    <td>
+                        <mat-label><b>Grade:</b></mat-label>
+                    </td>
+                    <td>
+                        <mat-form-field>
+                            <input matInput [readonly]="true" [(ngModel)]="data.grade" value="data.grade">
+                        </mat-form-field>
+                    </td>
+                </tr>
+            <tr>
+                    <td>
+                        <mat-label><b>Delivery Date:</b></mat-label>
+                    </td>
+                    <td>
+                        <mat-form-field>
+                            <input matInput [readonly]="true" [(ngModel)]="data.intendedDeliveryDate" value="data.intendedDeliveryDate">
+                        </mat-form-field>
+                    </td>
+                </tr>
+        
+                <tr>
+                    <td>
+                        <mat-label><b>Comments:</b></mat-label>
+                    </td>
+                    <td>
+                        <mat-form-field>
+                            <input matInput [readonly]="true" [(ngModel)]="data.comments" value="data.comments">
+                        </mat-form-field>
+                    </td>
+                </tr>
+
+                <tr *ngIf="isBankAdded">
+                        <td>
+                            <mat-label><b>Bank Account Address:</b></mat-label>
+                        </td>
+                        <td>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="data.bankAddress" value="data.bankAddress">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+
+       
+    <tr>
+    
+
+        <td> 
+        <button *ngIf="!checked" mat-raised-button style="background: white; color: #3f51b5;" (click)="requestLOC();">Request LOC</button>
+        <div *ngIf="spinner" >
+                <mat-spinner
+                ></mat-spinner>
+             
+       </div></td>
+        <td *ngIf="isBank"> <button mat-raised-button style="background: white; color: #3f51b5;" (click)="check();">Add Bank details</button></td>
+        <td *ngIf="checked"> <button mat-raised-button style="background:white; color: #3f51b5;" (click)="setBank();">Add</button>
+            <div *ngIf="spinner" >
+                    <mat-spinner
+                    ></mat-spinner>
+                 
+           </div></td>
+        
+    </tr>
+</table>

@@ -1,0 +1,30 @@
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.mat-card-header-text{
+  width: 100% !important;
+}
+
+.loader-parent {
+    position:relative;
+    height: 100%;
+    width:100%;
+}
+
+.loader-img {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width: 300px;
+    height:300px;
+    margin:auto;
+
+}
+

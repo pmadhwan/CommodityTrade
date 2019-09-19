@@ -1,0 +1,36 @@
+.fixed-footer {
+    bottom: 0;
+    position: relative;
+    height: 100px;
+    padding: 12px;
+    margin-top: 30px;
+  }
+  
+  .logo {
+    height: 50px;
+  }
+  .social-logo {
+    height: 30px;
+  }
+  
+  .fill-space {
+    flex: 1 1 auto;
+  }
+  
+  .desc {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .footer-title {
+    font-size: 20px;
+    color: white;
+  }
+  
+  .footer-desp {
+    font-size: 15px;
+    color: white;
+  }
+  

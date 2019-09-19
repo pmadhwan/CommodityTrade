@@ -1,0 +1,17 @@
+
+.fixed-header {
+    top: 0;
+    position: fixed;
+    z-index:999;
+    height: 50px;
+  
+  }
+  
+  .logo {
+    height: 26px;
+  }
+  
+  .fill-space {
+    flex: 1 1 auto;
+  }
+  
